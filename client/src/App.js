@@ -2,53 +2,62 @@
 import './App.css';
 import React, { Component } from 'react';
 import Customer from './components/Customer';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import { mergeClasses, withStyles } from '@material-ui/styles';
+import { Table, TableBody, TableCell, TableRow } from '@material-ui/core';
 
-const customers = [
-  {
-  'id': 1,
-  'image': 'https://placeimg.com/64/64/1',
-  'name': '홍길동',
-  'birthday': '750201',
-  'gender': '남자',
-  'job': '대학생'
-  },
-  {
-  'id': 2,
-  'image': 'https://placeimg.com/64/64/2',
-  'name': '홍길동',
-  'birthday': '750201',
-  'gender': '남자',
-  'job': '대학생'
-  },
-  {
-  'id': 3,
-  'image': 'https://placeimg.com/64/64/3',
-  'name': '홍길동',
-  'birthday': '750201',
-  'gender': '남자',
-  'job': '대학생'
+const styles = theme => ({
+  progress: {
+    margin: theme.spacing.unit * 2
   }
-]
+});
 
 class App extends Component {
+
+  state = {
+    customers: "",
+    completed: 0
+  }
+
+  componentDidMount() {
+    this.timer = setInterval(this.progress, 20);
+    this.callApi()
+      .then(res => this.setState({customers: res}))
+      .catch(err => console.log(err));
+  }
+
+  callApi = async () => {
+    const response = await fetch('api/customers');
+    const body = await response.json();
+    return body;
+  }
+
+  progress = () => {
+    const { completed } = this.state;
+    this.setState({ completed: completed >= 100 ? 0 : completed + 1})
+  }
+
   render() {
-      return (
-          <div>
-            {customers.map(c => {
-              return(
-                <Customer 
-                  key={c.id}
-                  id={c.id}
-                  image={c.image}
-                  name={c.name}
-                  birthday={c.birthday}
-                  gender={c.gender}
-                  job={c.job}
-                />
-              )
-            })}
-          </div>
-      );
+    const { classes } = this.props;
+    return (
+        <div>
+          {this.state.customers ? this.state.customers.map(c => {
+            return(
+              <Customer 
+                key={c.id}
+                id={c.id}
+                image={c.image}
+                name={c.name}
+                birthday={c.birthday}
+                gender={c.gender}
+                job={c.job}
+              />
+            )
+          }) : 
+          <CircularProgress className={classes.progress} variant="determinate" value={this.state.completed} />
+          }
+        </div>
+    );
   }
 }
 
