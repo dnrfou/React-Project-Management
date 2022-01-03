@@ -168,7 +168,7 @@ class App extends Component {
                 component="div"
                 sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
               >
-                고객관리 시스템입니다
+                고객관리 시스템입니다. EC2서버
               </Typography>
               <Search>
                 <SearchIconWrapper>
