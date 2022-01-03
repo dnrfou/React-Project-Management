@@ -24,7 +24,7 @@ connection.connect((e) => {
 });
 
 const multer = require('multer');
-const upload = multer({dest: 'https://dnrfoubucket1.s3.us-east-2.amazonaws.com/upload'});
+const upload = multer({dest: './upload'});
 
 app.get('/api/customers', (req, res) => {
     connection.query(
@@ -35,7 +35,7 @@ app.get('/api/customers', (req, res) => {
     );
 });
 
-app.use('/image', express.static('https://dnrfoubucket1.s3.us-east-2.amazonaws.com/upload'));
+app.use('/image', express.static('./upload'));
 app.post('/api/customers', upload.single('image'), (req, res) => {
     
     let sql = 'INSERT INTO customer VALUES (null, ?, ?, ?, ?, ?, now(), 0)';
