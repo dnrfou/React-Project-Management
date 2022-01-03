@@ -24,7 +24,7 @@ connection.connect((e) => {
 });
 
 const multer = require('multer');
-const upload = multer({dest: './upload'});
+const upload = multer({dest: 'https://dnrfoubucket1.s3.us-east-2.amazonaws.com/upload'});
 
 app.get('/api/customers', (req, res) => {
     connection.query(
