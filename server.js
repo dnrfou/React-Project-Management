@@ -17,7 +17,11 @@ const connection = mysql.createConnection({
     port: conf.port,
     database: conf.database
 });
-connection.connect();
+connection.connect((e) => {
+    if(!e) {
+        console.log("==============[success]============");
+    }
+});
 
 const multer = require('multer');
 const upload = multer({dest: './upload'});
